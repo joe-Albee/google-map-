@@ -1,0 +1,310 @@
+{
+  "version": "1.0",
+  "description": "Seed historical incidents for route-history feature. Individual incidents are source-backed; district summaries are aggregate context and must not be counted as individual incidents.",
+  "incidents": [
+    {
+      "id": "INC-THENI-BODI-2022-001",
+      "type": "road_accident",
+      "title": "Two youths killed in motorcycle and bullock-cart collision",
+      "locationName": "Mundhal, Bodi-Munnar Highway, near Bodinayakanur, Theni",
+      "incidentDate": "2022-02-16",
+      "reportedDate": "2022-02-18",
+      "severity": "HIGH",
+      "routeTags": [
+        "Chennai-Munnar"
+      ],
+      "lat": null,
+      "lng": null,
+      "geocodeRequired": true,
+      "description": "A motorcycle struck a bullock cart from behind on the Bodi-Munnar highway near Mundhal. Two youths died.",
+      "sourceName": "DT Next",
+      "sourceUrl": "https://www.dtnext.in/news/tamilnadu/2-youth-killed-near-bodinayakanur-as-motorbike-hits-bullockcart"
+    },
+    {
+      "id": "INC-MUNNAR-2024-11-001",
+      "type": "road_accident",
+      "title": "Car and motorcycle collision near Old Government College",
+      "locationName": "Old Government College area, Munnar, Kochi-Dhanushkodi National Highway",
+      "incidentDate": "2024-11-01",
+      "reportedDate": "2024-11-02",
+      "severity": "HIGH",
+      "routeTags": [
+        "Chennai-Munnar"
+      ],
+      "lat": null,
+      "lng": null,
+      "geocodeRequired": true,
+      "description": "A motorcycle collided with a car near the Old Government College area on the Kochi-Dhanushkodi National Highway. The motorcyclist suffered serious injuries.",
+      "sourceName": "Malayala Manorama",
+      "sourceUrl": "https://www.manoramaonline.com/district-news/idukki/2024/11/02/munnar-bike-accident-youth-hospitalized.html"
+    },
+    {
+      "id": "INC-KUMILY-2024-11-001",
+      "type": "road_accident",
+      "title": "Car and lorry collision near Amaravathi",
+      "locationName": "Amaravathi AKG Padi, Kumily-Munnar Road",
+      "incidentDate": "2024-11-26",
+      "reportedDate": "2024-11-27",
+      "severity": "MEDIUM",
+      "routeTags": [
+        "Chennai-Munnar"
+      ],
+      "lat": null,
+      "lng": null,
+      "geocodeRequired": true,
+      "description": "A car carrying tourists collided with a lorry near Amaravathi AKG Padi on the Kumily-Munnar road. Two people were injured.",
+      "sourceName": "Malayala Manorama",
+      "sourceUrl": "https://www.manoramaonline.com/district-news/idukki/2024/11/27/kumily-munnar-road-car-lorry-collision.html"
+    },
+    {
+      "id": "INC-KUMILY-2006-10-001",
+      "type": "road_accident",
+      "title": "Jeep accident on Kumily-Munnar Road",
+      "locationName": "Kalkoonthal, Kumily-Munnar Road",
+      "incidentDate": "2006-10-16",
+      "reportedDate": null,
+      "severity": "HIGH",
+      "routeTags": [
+        "Chennai-Munnar"
+      ],
+      "lat": null,
+      "lng": null,
+      "geocodeRequired": true,
+      "description": "A jeep accident occurred on the Kumily-Munnar road at Kalkoonthal; a passenger sustained fatal injuries.",
+      "sourceName": "Kerala High Court judgment",
+      "sourceUrl": "https://www.casemine.com/judgement/in/5ac5e4c04a93261aa795041d"
+    },
+    {
+      "id": "INC-THENI-1978-06-001",
+      "type": "road_accident",
+      "title": "Jeep and bus collision",
+      "locationName": "Nallakaruppanpatti, Periyakulam-Batlagundu Main Road, Theni region",
+      "incidentDate": "1978-06-14",
+      "reportedDate": "1981-07-21",
+      "severity": "HIGH",
+      "routeTags": [
+        "Chennai-Munnar"
+      ],
+      "lat": null,
+      "lng": null,
+      "geocodeRequired": true,
+      "description": "A jeep belonging to Theni Allinagaram Municipality collided with a bus near Nallakaruppanpatti on the Periyakulam-Batlagundu Main Road. The jeep occupants suffered grievous injuries.",
+      "sourceName": "Madras High Court",
+      "sourceUrl": "https://indiankanoon.org/doc/33682/"
+    },
+    {
+      "id": "INC-DINDIGUL-2018-02-001",
+      "type": "road_accident",
+      "title": "Car and truck head-on collision",
+      "locationName": "Sithaiyankottai near Sempatti, Dindigul",
+      "incidentDate": "2018-02-04",
+      "reportedDate": "2018-02-05",
+      "severity": "HIGH",
+      "routeTags": [
+        "Chennai-Munnar"
+      ],
+      "lat": null,
+      "lng": null,
+      "geocodeRequired": true,
+      "description": "A car collided head-on with a truck near Sithaiyankottai/Sempatti in Dindigul district. Two people died at the scene.",
+      "sourceName": "Times of India",
+      "sourceUrl": "https://timesofindia.indiatimes.com/city/madurai/two-killed-in-road-accident/articleshow/62782278.cms"
+    },
+    {
+      "id": "INC-BODIMETTU-2021-05-001",
+      "type": "rockslide",
+      "title": "Large boulders blocked Bodi Mettu Ghat Road",
+      "locationName": "Bodi Mettu Ghat Road, 107th km of Madurai-Cochin NH-49, Theni",
+      "incidentDate": "2021-05-09",
+      "reportedDate": "2021-05-10",
+      "severity": "HIGH",
+      "routeTags": [
+        "Chennai-Munnar"
+      ],
+      "lat": null,
+      "lng": null,
+      "geocodeRequired": true,
+      "description": "Overnight rockslides dropped large boulders onto Bodi Mettu Ghat Road and blocked interstate traffic. No major accident was reported because vehicular movement was limited during the COVID lockdown.",
+      "sourceName": "DT Next",
+      "sourceUrl": "https://www.dtnext.in/tamilnadu/2021/05/10/bodi-ghat-road-shut-for-interstate-traffic-as-boulders-fall"
+    },
+    {
+      "id": "INC-MUNNAR-PETTIMUDI-2020-08-001",
+      "type": "landslide",
+      "title": "Pettimudi landslide",
+      "locationName": "Pettimudi, Munnar, Idukki",
+      "incidentDate": "2020-08-06",
+      "reportedDate": "2020-08-06",
+      "severity": "HIGH",
+      "routeTags": [
+        "Munnar-region"
+      ],
+      "lat": null,
+      "lng": null,
+      "geocodeRequired": true,
+      "description": "A major landslide occurred at Pettimudi, Munnar. The India Meteorological Department recorded 65 deaths in the event and major road/bridge disruption in the area.",
+      "sourceName": "India Meteorological Department, Disastrous Weather Events 2020",
+      "sourceUrl": "https://imdpune.gov.in/library/public/DWE-2020.pdf"
+    },
+    {
+      "id": "INC-MUNNAR-GHAT-2019-001",
+      "type": "landslide",
+      "title": "Landslide on Munnar Ghat Road",
+      "locationName": "Munnar Ghat Road 1",
+      "incidentDate": "2019",
+      "reportedDate": null,
+      "severity": "HIGH",
+      "routeTags": [
+        "Munnar-region"
+      ],
+      "lat": 10.036,
+      "lng": 77.128,
+      "geocodeRequired": false,
+      "description": "Kerala State Planning Board's field report records a 2019 landslide on Munnar Ghat Road 1; the report notes two casualties and a series of landslides associated with road widening activity.",
+      "sourceName": "Kerala State Planning Board landslide report",
+      "sourceUrl": "https://spb.kerala.gov.in/sites/default/files/inline-files/Final_Report_0.pdf"
+    },
+    {
+      "id": "INC-MUNNAR-GHAT-2019-002",
+      "type": "landslide",
+      "title": "Landslide on Munnar Ghat Road",
+      "locationName": "Munnar Ghat Road 2",
+      "incidentDate": "2019",
+      "reportedDate": null,
+      "severity": "MEDIUM",
+      "routeTags": [
+        "Munnar-region"
+      ],
+      "lat": 10.037,
+      "lng": 77.13,
+      "geocodeRequired": false,
+      "description": "Kerala State Planning Board's field report records a 2019 landslide at a second Munnar Ghat Road location.",
+      "sourceName": "Kerala State Planning Board landslide report",
+      "sourceUrl": "https://spb.kerala.gov.in/sites/default/files/inline-files/Final_Report_0.pdf"
+    },
+    {
+      "id": "INC-MUNNAR-COLLEGE-2018-001",
+      "type": "landslide",
+      "title": "Munnar Government College landslide",
+      "locationName": "Government College Munnar",
+      "incidentDate": "2018",
+      "reportedDate": null,
+      "severity": "MEDIUM",
+      "routeTags": [
+        "Munnar-region"
+      ],
+      "lat": 10.082,
+      "lng": 77.073,
+      "geocodeRequired": false,
+      "description": "A landslide at the Government College Munnar site was documented in a Kerala State Planning Board field report. Drainage blockage and previous cracks were noted.",
+      "sourceName": "Kerala State Planning Board landslide report",
+      "sourceUrl": "https://spb.kerala.gov.in/sites/default/files/inline-files/Final_Report_0.pdf"
+    },
+    {
+      "id": "INC-MUNNAR-SILENT-VALLEY-2019-001",
+      "type": "landslide",
+      "title": "Landslide on Munnar Silent Valley Road",
+      "locationName": "Munnar Silent Valley Road",
+      "incidentDate": "2019",
+      "reportedDate": null,
+      "severity": "MEDIUM",
+      "routeTags": [
+        "Munnar-region"
+      ],
+      "lat": 10.087,
+      "lng": 77.094,
+      "geocodeRequired": false,
+      "description": "Kerala State Planning Board's field report records a 2019 landslide on Munnar Silent Valley Road; no casualty was reported in that entry.",
+      "sourceName": "Kerala State Planning Board landslide report",
+      "sourceUrl": "https://spb.kerala.gov.in/sites/default/files/inline-files/Final_Report_0.pdf"
+    },
+    {
+      "id": "INC-MUNNAR-FLOOD-1924-001",
+      "type": "flood",
+      "title": "Great Flood of 1924 and destruction of Munnar road",
+      "locationName": "Karinthiri / historic Aluva-Munnar road",
+      "incidentDate": "1924-07-23",
+      "reportedDate": null,
+      "severity": "HIGH",
+      "routeTags": [
+        "Munnar-region"
+      ],
+      "lat": null,
+      "lng": null,
+      "geocodeRequired": true,
+      "description": "Kerala disaster-management/history sources document the 1924 flood and landslides around Karinthiri that destroyed the historic road connection to Munnar.",
+      "sourceName": "Kerala State Disaster Management Authority / Kerala government sources",
+      "sourceUrl": "https://sdma.kerala.gov.in/wp-content/uploads/2026/03/LNOB_MB_CMID2026.pdf"
+    },
+    {
+      "id": "INC-NILGIRIS-2009-001",
+      "type": "landslide",
+      "title": "Major landslides and road damage in the Nilgiris",
+      "locationName": "Ketti / Mettupalayam-Ooty approach, Nilgiris",
+      "incidentDate": "2009-11",
+      "reportedDate": null,
+      "severity": "HIGH",
+      "routeTags": [
+        "Chennai-Ooty"
+      ],
+      "lat": null,
+      "lng": null,
+      "geocodeRequired": true,
+      "description": "A peer-reviewed study documents major landslides in the Nilgiris in November 2009, including severe damage to the Mettupalayam-Coonoor-Ooty approach road.",
+      "sourceName": "Geoenvironmental Disasters / Springer",
+      "sourceUrl": "https://link.springer.com/article/10.1186/s40677-019-0139-3"
+    }
+  ],
+  "districtAccidentSummaries": [
+    {
+      "id": "SUM-TN-2023-CHENNAI",
+      "year": 2023,
+      "district": "Chennai City",
+      "totalAccidents": 3653,
+      "fatalAccidents": 498,
+      "fatalities": 503,
+      "sourceName": "Tamil Nadu State Transport Authority",
+      "sourceUrl": "https://tnsta.gov.in/pdfpage/pdfpage_en_4LPhMMh_2024_05_29.pdf"
+    },
+    {
+      "id": "SUM-TN-2023-SALEM",
+      "year": 2023,
+      "district": "Salem",
+      "totalAccidents": 3199,
+      "fatalAccidents": 721,
+      "fatalities": 797,
+      "sourceName": "Tamil Nadu State Transport Authority",
+      "sourceUrl": "https://tnsta.gov.in/pdfpage/pdfpage_en_4LPhMMh_2024_05_29.pdf"
+    },
+    {
+      "id": "SUM-TN-2023-DINDIGUL",
+      "year": 2023,
+      "district": "Dindigul",
+      "totalAccidents": 2296,
+      "fatalAccidents": 643,
+      "fatalities": 755,
+      "sourceName": "Tamil Nadu State Transport Authority",
+      "sourceUrl": "https://tnsta.gov.in/pdfpage/pdfpage_en_4LPhMMh_2024_05_29.pdf"
+    },
+    {
+      "id": "SUM-TN-2023-THENI",
+      "year": 2023,
+      "district": "Theni",
+      "totalAccidents": 1177,
+      "fatalAccidents": 239,
+      "fatalities": 327,
+      "sourceName": "Tamil Nadu State Transport Authority",
+      "sourceUrl": "https://tnsta.gov.in/pdfpage/pdfpage_en_4LPhMMh_2024_05_29.pdf"
+    },
+    {
+      "id": "SUM-TN-2023-NILGIRIS",
+      "year": 2023,
+      "district": "The Nilgiris",
+      "totalAccidents": 213,
+      "fatalAccidents": 33,
+      "fatalities": 75,
+      "sourceName": "Tamil Nadu State Transport Authority",
+      "sourceUrl": "https://tnsta.gov.in/pdfpage/pdfpage_en_4LPhMMh_2024_05_29.pdf"
+    }
+  ]
+}
