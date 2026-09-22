@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Anchor, HeartHandshake, LifeBuoy, MessageSquare, PhoneCall, Send, Shield, Truck, UsersRound, Waves } from 'lucide-react'
+import { HeartHandshake, LifeBuoy, MessageSquare, PhoneCall, Send, Shield, Truck, UsersRound, Waves } from 'lucide-react'
 
 const resources = [
   { title: 'Women Help', description: 'India women-safety contacts for urgent help and support.', icon: UsersRound, action: 'Open support options', liveOptions: [{ label: 'Call 112 Emergency', href: 'tel:112' }, { label: 'Call 181 Women Helpline', href: 'tel:181' }, { label: 'Official support website', href: 'https://www.ncw.gov.in/' }] },
@@ -14,7 +14,6 @@ const resources = [
 export default function EmergencySupport({ onNotice }) {
   const [holding, setHolding] = useState(false)
   const [seconds, setSeconds] = useState(0)
-  const [feedback, setFeedback] = useState('')
   const timer = useRef(null)
   const startHold = () => {
     setHolding(true); setSeconds(0)
@@ -34,18 +33,11 @@ export default function EmergencySupport({ onNotice }) {
     setSeconds(0)
   }
   useEffect(() => () => window.clearInterval(timer.current), [])
-  const submitFeedback = (event) => {
-    event.preventDefault()
-    if (!feedback.trim()) return
-    onNotice('Feedback captured locally. A backend connection is required to send it to the TourSafe team.')
-    setFeedback('')
-  }
   return <section className="support-area">
     <div className="sos-card">
       <div><div className="eyebrow">QUICK ACTION</div><h2>SOS Emergency</h2><p>Press and hold for 3 seconds to prepare an emergency call and location-sharing action.</p></div>
       <button className={`sos-button ${holding ? 'holding' : ''}`} onPointerDown={startHold} onPointerUp={stopHold} onPointerLeave={stopHold} aria-label="Press and hold SOS Emergency">{holding ? `${Math.min(seconds + 1, 3)}s` : 'SOS'}</button>
     </div>
     <div className="support-grid">{resources.map(({ title, description, icon: Icon, action, phoneLabel, phone, liveOptions }) => <article className="support-card" key={title}><div className="support-icon"><Icon size={19} /></div><h3>{title}</h3><p>{description}</p>{liveOptions ? <div className="support-links">{liveOptions.map((option) => <a href={option.href} target={option.href.startsWith('http') ? '_blank' : undefined} rel={option.href.startsWith('http') ? 'noreferrer' : undefined} key={option.label}><PhoneCall size={13} /> {option.label}</a>)}</div> : phone ? <a className="support-action" href={phone}><PhoneCall size={13} /> {phoneLabel}</a> : <button onClick={() => onNotice(`${title}: ${action}. Live provider integration is not connected.`)}>{title === 'Emergency Transport' ? <PhoneCall size={13} /> : <Shield size={13} />} {action}</button>}</article>)}</div>
-    <form className="feedback-card" onSubmit={submitFeedback}><div><div className="eyebrow">FEEDBACK</div><h2>Report incorrect safety information</h2><p>Help improve TourSafe by sharing an issue with the safety information.</p></div><div className="feedback-form"><textarea value={feedback} onChange={(event) => setFeedback(event.target.value)} placeholder="Describe the issue…" rows="2" /><button className="primary-button" type="submit"><Send size={14} /> Submit feedback</button></div></form>
   </section>
 }
