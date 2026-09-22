@@ -81,7 +81,8 @@ export default function App() {
   const locate = () => { if (!navigator.geolocation) return setNotice('Location services are unavailable. Please enter your starting location manually.'); navigator.geolocation.getCurrentPosition(({ coords }) => { const point = { lat: coords.latitude, lng: coords.longitude, label: 'My current location' }; setCurrentLocation(point); setStart('My current location'); setStartPoint(point); setNotice('Current location added as your starting point. Enter a destination and check the route.') }, () => setNotice('Location permission was denied. You can enter a location manually.')) }
   const sendFeedback = async (event) => {
     event.preventDefault()
-    const form = new FormData(event.currentTarget)
+    const formElement = event.currentTarget
+    const form = new FormData(formElement)
     const name = String(form.get('name') || '').trim()
     const email = String(form.get('email') || '').trim()
     const feedbackText = String(form.get('feedback') || '').trim()
@@ -106,7 +107,7 @@ export default function App() {
       })
       const result = await response.json()
       if (!response.ok || !result.success) throw new Error(result.message || 'Feedback submission failed.')
-      event.currentTarget.reset()
+      formElement.reset()
       setNotice('Feedback submitted successfully!')
     } catch (error) {
       setNotice(error.message || 'Unable to send feedback right now. Please try again later.')
