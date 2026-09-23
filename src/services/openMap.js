@@ -1,7 +1,10 @@
 const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search'
 const PHOTON_URL = 'https://photon.komoot.io/api'
 const OSRM_URL = 'https://router.project-osrm.org/route/v1/driving'
-const OVERPASS_URL = 'https://overpass-api.de/api/interpreter'
+const OVERPASS_URLS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.private.coffee/api/interpreter',
+]
 const WEATHER_URL = 'https://api.open-meteo.com/v1/forecast'
 const ROUTE_CORRIDOR_KM = 10
 const INCIDENT_CACHE_KEY = 'saferoute-historical-geocodes-v1'
@@ -162,7 +165,7 @@ const distanceBetween = (a, b) => {
   return Math.sqrt((dLat ** 2) + (dLng ** 2))
 }
 
-const routeSamplePoints = (coordinates, maxPoints = 10) => {
+const routeSamplePoints = (coordinates, maxPoints = 6) => {
   const step = Math.max(1, Math.ceil(coordinates.length / maxPoints))
   return coordinates.filter((_, index) => index % step === 0 || index === coordinates.length - 1)
 }
@@ -170,14 +173,40 @@ const routeSamplePoints = (coordinates, maxPoints = 10) => {
 export async function findEmergencyServices(route, radiusKm = 5) {
   if (!route?.coordinates?.length) return []
   const points = routeSamplePoints(route.coordinates)
-  const queries = points.map(([lat, lng]) => {
-    const clauses = serviceTypes.map(([tag]) => `nwr(around:${radiusKm * 1000},${lat},${lng})["amenity"="${tag}"];`).join('')
-    return `(${clauses});`
-  })
-  const query = `[out:json][timeout:45];${queries.join('')}out center tags;`
-  const response = await fetch(OVERPASS_URL, { method: 'POST', body: new URLSearchParams({ data: query }), headers: { Accept: 'application/json' } })
-  if (!response.ok) throw new Error('Emergency service data is temporarily unavailable')
-  const data = await response.json()
+  const amenityPattern = serviceTypes.map(([tag]) => tag).join('|')
+  const queries = points.map(([lat, lng]) => `nwr(around:${Math.min(radiusKm, 3) * 1000},${lat},${lng})["amenity"~"^(${amenityPattern})$"];`)
+  const query = `[out:json][timeout:12];(${queries.join('')});out center tags;`
+  let data
+  for (const url of OVERPASS_URLS) {
+    let timeout
+    try {
+      const controller = new AbortController()
+      timeout = window.setTimeout(() => controller.abort(), 15000)
+      const response = await fetch(url, {
+        method: 'POST',
+        signal: controller.signal,
+        body: new URLSearchParams({ data: query }),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        },
+      })
+      window.clearTimeout(timeout)
+      if (!response.ok) continue
+      const text = await response.text()
+      if (!text.trim()) continue
+      const parsed = JSON.parse(text)
+      if (Array.isArray(parsed.elements)) {
+        data = parsed
+        break
+      }
+    } catch {
+      // Try the next public Overpass instance.
+    } finally {
+      if (timeout) window.clearTimeout(timeout)
+    }
+  }
+  if (!data) return []
   const unique = new Map()
   data.elements.forEach((element) => {
     const lat = element.lat ?? element.center?.lat

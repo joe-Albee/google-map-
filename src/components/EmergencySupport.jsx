@@ -21,7 +21,6 @@ export default function EmergencySupport({ onNotice }) {
       if (value >= 2) {
         window.clearInterval(timer.current)
         setHolding(false)
-        onNotice('SOS prepared. Confirm your emergency call and location sharing before contacting local services.')
         return 3
       }
       return value + 1
