@@ -11,7 +11,7 @@ function FitRoute({ route }) {
   return null
 }
 
-const emergencyColors = { Hospital: '#4b83a9', 'Police station': '#506db1', 'Fire station': '#d6634d', 'Ambulance service': '#c18a3c', Pharmacy: '#8b6bb0' }
+const emergencyColors = { Hospital: '#4b83a9', 'Police station': '#506db1', 'Fire station': '#d6634d', Clinic: '#8b6bb0', 'Rescue station': '#c18a3c', 'Ambulance service': '#c18a3c', Pharmacy: '#8b6bb0' }
 const directionsUrl = (from, service) => from ? `https://www.openstreetmap.org/directions?engine=fossgis_osrm_car&route=${from.lat},${from.lng};${service.lat},${service.lng}` : `https://www.openstreetmap.org/?mlat=${service.lat}&mlon=${service.lng}#map=17/${service.lat}/${service.lng}`
 export default function MapView({ incidents, onMarkerClick, start, destination, route, emergencyServices = [], weatherPoints = [], currentLocation }) {
   const center = route?.coordinates?.[Math.floor(route.coordinates.length / 2)] || [11.35, 76.79]

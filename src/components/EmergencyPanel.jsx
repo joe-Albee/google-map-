@@ -1,8 +1,8 @@
-import { Ambulance, Flame, MapPin, Phone, Pill, Search, Shield, Siren } from 'lucide-react'
+import { Ambulance, Flame, MapPin, Phone, Pill, Search, Shield, Siren, Stethoscope } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
-const filters = [['All', null], ['Hospitals', 'Hospital'], ['Police', 'Police station'], ['Fire', 'Fire station'], ['Ambulance', 'Ambulance service'], ['Pharmacies', 'Pharmacy']]
-const icons = { Hospital: Ambulance, 'Police station': Shield, 'Fire station': Flame, 'Ambulance service': Siren, Pharmacy: Pill }
+const filters = [['All', null], ['Hospitals', 'Hospital'], ['Police', 'Police station'], ['Fire', 'Fire station'], ['Clinics', 'Clinic'], ['Rescue', 'Rescue station'], ['Ambulance', 'Ambulance service'], ['Pharmacies', 'Pharmacy']]
+const icons = { Hospital: Ambulance, 'Police station': Shield, 'Fire station': Flame, Clinic: Stethoscope, 'Rescue station': Siren, 'Ambulance service': Ambulance, Pharmacy: Pill }
 
 export default function EmergencyPanel({ compact = false, services = [], loading = false, error = '', hasRoute = false, onRetry, currentLocation, startPoint }) {
   const [filter, setFilter] = useState(null)
@@ -33,7 +33,7 @@ export default function EmergencyPanel({ compact = false, services = [], loading
     <p className="route-service-count"><Siren size={15} /> {loading ? 'Searching along your route…' : `${services.length} services found near your route`}</p>
     <label className="service-search"><Search size={16} /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search emergency services" aria-label="Search emergency services" disabled={!services.length} /></label>
     <div className="service-filters">{filters.map(([label, value]) => <button key={label} className={filter === value ? 'selected' : ''} onClick={() => setFilter(value)} disabled={!services.length}>{label}</button>)}</div>
-    {loading && services.length === 0 && <p className="empty-services">Searching OpenStreetMap for hospitals, police, fire, ambulance services and pharmacies along this route…</p>}
+    {loading && services.length === 0 && <p className="empty-services">Searching OpenStreetMap for hospitals, police, fire stations, clinics, rescue stations, ambulance services and pharmacies along this route…</p>}
     {!loading && services.length === 0 && <div className="empty-services"><p>{emptyMessage}</p>{hasRoute && error && <button className="retry-button" onClick={onRetry}>Try again</button>}</div>}
     {services.length > 0 && visible.length === 0 && <p className="empty-services">No emergency services match your search.</p>}
     {Object.entries(sections).map(([section, items]) => <div className="service-section" key={section}><strong>{section}</strong>{items.map((service) => {

@@ -155,6 +155,8 @@ const emergencyTypes = {
   hospital: 'Hospital',
   police: 'Police station',
   fire_station: 'Fire station',
+  clinic: 'Clinic',
+  rescue_station: 'Rescue station',
   ambulance_station: 'Ambulance service',
   pharmacy: 'Pharmacy',
 }
@@ -191,7 +193,7 @@ export async function findEmergencyServices(route, radiusKm = 7) {
   const points = routeSamplePoints(route.coordinates)
   const queries = points.map(([lat, lng]) => {
     const around = `around:${radiusKm * 1000},${lat},${lng}`
-    return `nwr(${around})["amenity"~"^(hospital|police|fire_station|ambulance_station|pharmacy)$"];nwr(${around})["healthcare"~"^(hospital|ambulance_station|pharmacy)$"];nwr(${around})["emergency"="ambulance_station"];`
+    return `nwr(${around})["amenity"~"^(hospital|police|fire_station|ambulance_station|pharmacy|clinic|rescue_station)$"];nwr(${around})["healthcare"~"^(hospital|ambulance_station|pharmacy|clinic)$"];nwr(${around})["emergency"~"^(ambulance_station|rescue_station)$"];`
   })
   const query = `[out:json][timeout:25];(${queries.join('')});out center tags;`
   const request = async (url) => {
