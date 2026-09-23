@@ -2,6 +2,7 @@ const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search'
 const PHOTON_URL = 'https://photon.komoot.io/api'
 const OSRM_URL = 'https://router.project-osrm.org/route/v1/driving'
 const OVERPASS_URLS = [
+  'https://overpass.openstreetmap.fr/api/interpreter',
   'https://overpass-api.de/api/interpreter',
   'https://overpass.private.coffee/api/interpreter',
 ]
@@ -150,13 +151,13 @@ export async function hydrateHistoricalIncidents(incidents) {
   return hydrated
 }
 
-const serviceTypes = [
-  ['hospital', 'Hospital'],
-  ['police', 'Police'],
-  ['fire_station', 'Fire Station'],
-  ['clinic', 'Clinic'],
-  ['rescue_station', 'Rescue'],
-]
+const emergencyTypes = {
+  hospital: 'Hospital',
+  police: 'Police station',
+  fire_station: 'Fire station',
+  ambulance_station: 'Ambulance service',
+  pharmacy: 'Pharmacy',
+}
 
 const distanceBetween = (a, b) => {
   const lat = ((a[0] + b[0]) / 2) * Math.PI / 180
@@ -165,23 +166,36 @@ const distanceBetween = (a, b) => {
   return Math.sqrt((dLat ** 2) + (dLng ** 2))
 }
 
-const routeSamplePoints = (coordinates, maxPoints = 6) => {
-  const step = Math.max(1, Math.ceil(coordinates.length / maxPoints))
-  return coordinates.filter((_, index) => index % step === 0 || index === coordinates.length - 1)
+const routeSamplePoints = (coordinates, spacingKm = 12, maxPoints = 38) => {
+  if (coordinates.length <= 2) return coordinates
+  const totalDistance = coordinates.slice(1).reduce((total, point, index) => total + distanceBetween(coordinates[index], point), 0)
+  const pointCount = Math.min(maxPoints, Math.max(2, Math.ceil(totalDistance / spacingKm) + 1))
+  const interval = totalDistance / (pointCount - 1)
+  const points = [coordinates[0]]
+  let travelled = 0
+  let nextPointAt = interval
+
+  for (let index = 1; index < coordinates.length - 1; index += 1) {
+    travelled += distanceBetween(coordinates[index - 1], coordinates[index])
+    if (travelled >= nextPointAt) {
+      points.push(coordinates[index])
+      nextPointAt += interval
+    }
+  }
+  points.push(coordinates[coordinates.length - 1])
+  return points
 }
 
-export async function findEmergencyServices(route, radiusKm = 5) {
+export async function findEmergencyServices(route, radiusKm = 7) {
   if (!route?.coordinates?.length) return []
   const points = routeSamplePoints(route.coordinates)
-  const amenityPattern = serviceTypes.map(([tag]) => tag).join('|')
-  const queries = points.map(([lat, lng]) => `nwr(around:${Math.min(radiusKm, 3) * 1000},${lat},${lng})["amenity"~"^(${amenityPattern})$"];`)
-  const query = `[out:json][timeout:12];(${queries.join('')});out center tags;`
-  let data
-  for (const url of OVERPASS_URLS) {
-    let timeout
+  const queries = points.map(([lat, lng]) => `nwr(around:${radiusKm * 1000},${lat},${lng})[~"^(amenity|healthcare|emergency)$"~"^(hospital|police|fire_station|ambulance_station|pharmacy)$"];`)
+  const query = `[out:json][timeout:25];(${queries.join('')});out center tags;`
+  const request = async (url) => {
+    let timeoutId
     try {
       const controller = new AbortController()
-      timeout = window.setTimeout(() => controller.abort(), 15000)
+      timeoutId = window.setTimeout(() => controller.abort(), 12000)
       const response = await fetch(url, {
         method: 'POST',
         signal: controller.signal,
@@ -191,38 +205,39 @@ export async function findEmergencyServices(route, radiusKm = 5) {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
         },
       })
-      window.clearTimeout(timeout)
-      if (!response.ok) continue
+      if (!response.ok) throw new Error(`Emergency service returned ${response.status}`)
       const text = await response.text()
-      if (!text.trim()) continue
+      if (!text.trim()) throw new Error('Emergency service returned an empty response')
       const parsed = JSON.parse(text)
-      if (Array.isArray(parsed.elements)) {
-        data = parsed
-        break
-      }
-    } catch {
-      // Try the next public Overpass instance.
+      if (!Array.isArray(parsed.elements)) throw new Error('Emergency service returned invalid data')
+      return parsed
     } finally {
-      if (timeout) window.clearTimeout(timeout)
+      if (timeoutId) window.clearTimeout(timeoutId)
     }
   }
-  if (!data) return []
+  let data
+  try {
+    // Use the first successful public endpoint so one slow or rate-limited instance cannot keep the panel loading.
+    data = await Promise.any(OVERPASS_URLS.map(request))
+  } catch {
+    throw new Error('Emergency service search is temporarily unavailable. Please try again.')
+  }
   const unique = new Map()
   data.elements.forEach((element) => {
     const lat = element.lat ?? element.center?.lat
     const lng = element.lon ?? element.center?.lon
-    const tag = element.tags?.amenity
+    const tags = element.tags || {}
+    const tag = [tags.amenity, tags.healthcare, tags.emergency].find((value) => emergencyTypes[value])
     if (!lat || !lng || !tag || unique.has(`${element.type}/${element.id}`)) return
     const nearest = route.coordinates.reduce((best, point, index) => {
       const distance = distanceBetween([lat, lng], point)
       return distance < best.distance ? { distance, index } : best
     }, { distance: Infinity, index: 0 })
-    const name = element.tags?.name || `${serviceTypes.find(([key]) => key === tag)?.[1] || 'Emergency service'} (unnamed)`
-    const address = [element.tags?.['addr:housenumber'], element.tags?.['addr:street'], element.tags?.['addr:city'], element.tags?.['addr:country']].filter(Boolean).join(', ')
+    const address = tags['addr:full'] || [tags['addr:housenumber'], tags['addr:street'], tags['addr:suburb'], tags['addr:city'], tags['addr:district'], tags['addr:state'], tags['addr:postcode'], tags['addr:country']].filter(Boolean).join(', ') || 'Not available'
     unique.set(`${element.type}/${element.id}`, {
-      id: `${element.type}-${element.id}`, name, type: serviceTypes.find(([key]) => key === tag)?.[1] || 'Rescue',
-      lat, lng, address, phone: element.tags?.phone || element.tags?.['contact:phone'],
-      openingHours: element.tags?.opening_hours, distanceFromRoute: `${nearest.distance.toFixed(1)} km`,
+      id: `${element.type}-${element.id}`, name: tags.name || 'Not available', type: emergencyTypes[tag],
+      lat, lng, address, phone: tags.phone || tags['contact:phone'] || 'Not available',
+      openingHours: tags.opening_hours || 'Not available', distanceFromRoute: `${nearest.distance.toFixed(1)} km`,
       section: `Near route · ${Math.round((nearest.index / Math.max(route.coordinates.length - 1, 1)) * 100)}%`,
     })
   })
