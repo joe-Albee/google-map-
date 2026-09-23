@@ -189,7 +189,10 @@ const routeSamplePoints = (coordinates, spacingKm = 12, maxPoints = 38) => {
 export async function findEmergencyServices(route, radiusKm = 7) {
   if (!route?.coordinates?.length) return []
   const points = routeSamplePoints(route.coordinates)
-  const queries = points.map(([lat, lng]) => `nwr(around:${radiusKm * 1000},${lat},${lng})[~"^(amenity|healthcare|emergency)$"~"^(hospital|police|fire_station|ambulance_station|pharmacy)$"];`)
+  const queries = points.map(([lat, lng]) => {
+    const around = `around:${radiusKm * 1000},${lat},${lng}`
+    return `nwr(${around})["amenity"~"^(hospital|police|fire_station|ambulance_station|pharmacy)$"];nwr(${around})["healthcare"~"^(hospital|ambulance_station|pharmacy)$"];nwr(${around})["emergency"="ambulance_station"];`
+  })
   const query = `[out:json][timeout:25];(${queries.join('')});out center tags;`
   const request = async (url) => {
     let timeoutId
